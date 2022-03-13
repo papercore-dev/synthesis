@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>askk TTS - Beta Test</title>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+<div>
+    
+    <div x-data="{ sidebarOpen: false, darkMode: false }" :class="{ 'dark': darkMode }">
+        <div class="flex h-screen bg-gray-100 dark:bg-gray-800 font-roboto">
+            <div :class="sidebarOpen ? 'block' : 'hidden'" @click="sidebarOpen = false"
+                class="fixed z-20 inset-0 bg-black opacity-50 transition-opacity lg:hidden"></div>
+    
+            <div :class="sidebarOpen ? 'block' : 'hidden'"
+                class="fixed z-30 inset-y-0 left-0 w-60 bg-white dark:bg-gray-900 overflow-y-auto">
+    
+                <nav class="flex flex-col mt-10 px-4 text">
+                    <a href="/tts-server/text-inference"
+                        class="mt-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-100  hover:bg-gray-200 dark:hover:bg-gray-800 rounded">TTS</a>
+                    <a href="#"
+                        class="mt-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-800 rounded">라이선스</a>
+                    <a href="#"
+                        class="mt-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-800 rounded">문의사항</a>
+                </nav>
+            </div>
+    
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <header class="flex justify-between items-center p-6">
+                    <div class="flex items-center space-x-4 lg:space-x-0">
+                        <button @click="sidebarOpen = true"
+                            class="text-gray-500 dark:text-gray-300 focus:outline-none lg:hidden">
+                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 6H20M4 12H20M4 18H11" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </button>
+    
+                        <div>
+                            <h1 class="text-2xl font-medium text-gray-800 dark:text-white">askk TTS</h1>
+                        </div>
+                    </div>
+    
+                    <div class="flex items-center space-x-4">
+                    </div>
+                </header>
+    
+                <main class="flex-1 overflow-x-hidden overflow-y-auto">
+                    <div class="container mx-auto">
+  
+  <card class="grid grid-cols-6 max-w-5xl mx-8 rounded-xl bg-blue-800 ">
+    
+    <div class="col-span-4">
+      
+      <h2 class="font-bold text-3xl text-white ml-10 mt-8"> 
+        askk TTS
+      </h2>
+      
+      <p class="font-light text-white text-sm ml-10 mt-5">
+        askk TTS는 현재 개발 및 시험 단계에 있으므로 상업화를 할 계획이 없습니다. 따라서 무료로 자유롭게 이용하세요!
+      </p>
+      
+      <button class="text-white font-semibold ml-10 mt-5 mb-8 group ">
+        의견 보내기
+      </button>
+      
+    </div>
+    
+    <div class="col-span-2 relative">
+     </div>
+     </card>
+    <br>
+      <card class="grid grid-cols-6 max-w-5xl mx-8 rounded-xl bg-green-500">
+    
+    <div class="col-span-6">
+            <h2 class="text-xl text-white ml-5 mt-4 mb-4"> 
+        음성합성
+      </h2>
+      <p class="text-white text-sm ml-5 mr-5 mb-5 mt-5 bg-red-500 rounded-xl px-2 shadow-md">
+        <strong>정치적/사회적/윤리적으로 문제가 될 수 있는 텍스트를 입력하시거나 범죄에 악용해서는 안 됩니다.</strong>
+      </p>
+         <textarea name="text" id="text" class="w-full h-64 rounded-xl border"></textarea>
+         <button id="infer" class="text-white font-semibold ml-10 mt-5 mb-8 group ">
+        ▶ 재생
+      </button>
+      <button id="stop" class="text-white font-semibold ml-10 mt-5 mb-8 group ">
+        ■ 정지
+      </button>
+      <input type="checkbox" style="display:none" id="enter" name="enter" value="ON">
+      <button class="text-white font-semibold ml-10 mt-5 mb-8 group ">
+       볼륨
+      </button>
+       <input type="range" id="volume" name="volume" min="0" max="10" value="5">
+    </div>
+    
+     </card>
+    <br>
+          <card class="grid grid-cols-6 max-w-5xl mx-8 rounded-xl bg-yellow-500">
+    
+    <div class="col-span-6">
+            <h2 class="text-xl text-white ml-5 mt-4 mb-4"> 
+        결과
+      </h2>
+      <p class="text-white text-sm ml-5 mr-5 mb-5 mt-5" id="result">
+        
+      </p>
+      
+      <button onclick="downloadMP3()" class="text-white font-semibold ml-10 mt-5 mb-8 group ">
+        다운로드
+      </button>
+    </div>
+    
+     </card>
+    
+
+
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        function sleep(time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
+        }
+
+        const textDOM = document.getElementById('text');
+        const resultDOM = document.getElementById('result');
+        const inferDOM = document.getElementById('infer');
+        const stopDOM = document.getElementById('stop');
+        const modelDOM = document.getElementById('model');
+        const volumeDOM = document.getElementById('volume');
+        const enterDOM = document.querySelector('input[name="enter"]');
+
+        var audio = null;
+        var audio_next = null;
+        var voice_queue = [];
+
+        function play_voice() {
+            if (audio_next != null) {
+                audio = audio_next;
+                audio_next = null;
+                audio.addEventListener('ended', play_voice);
+                sleep(300).then(() => {
+                    amplifyMedia(audio, volumeDOM.value / 5.0);
+                    audio.play();
+                });
+            }
+            if (voice_queue.length == 0) {
+                return;
+            }
+            const text = voice_queue[0];
+            voice_queue.shift();
+
+            audio_next = new Audio('/tts-server/api/infer-glowtts?text=' + encodeURI(text));
+            audio_next.type = 'audio/wav';
+            audio_next.load();
+            if (audio == null) {
+                play_voice();
+            }
+        }
+        function downloadMP3(){
+            window.open('/tts-server/api/infer-glowtts?text=' + encodeURI(text), '_blank');
+        }
+        function clear_voice() {
+            voice_queue = [];
+            if (audio != null) {
+                audio.removeEventListener('ended', play_voice);
+                audio.pause();
+                audio = null;
+                audio_next = null;
+            }
+        }
+
+        function infer() {
+            const text = textDOM.value;
+            fetch('/tts-server/api/process-text', {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: text
+                })
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (texts) {
+                    resultDOM.innerHTML = "";
+                    for (let i = 0; i < texts.length; i++) {
+                        const line = texts[i];
+                        resultDOM.innerHTML += "<p>" + line + "</p>";
+                    }
+                    clear_voice();
+                    voice_queue = texts;
+                    play_voice();
+                });
+        };
+
+
+        function amplifyMedia(audio, multiplier) {
+            var context = new (window.AudioContext || window.webkitAudioContext);
+            var result = {
+                context: context,
+                source: context.createMediaElementSource(audio),
+                gain: context.createGain(),
+                amplify: function (multiplier) { result.gain.gain.value = multiplier; },
+                getAmpLevel: function () { return result.gain.gain.value; }
+            };
+            result.source.connect(result.gain);
+            result.gain.connect(context.destination);
+            result.amplify(multiplier);
+            return result;
+        }
+
+        inferDOM.onclick = infer;
+        stopDOM.onclick = clear_voice;
+        textDOM.onkeypress = function (e) {
+            if (e.keyCode == 13 && enterDOM.checked) {
+                infer();
+                textDOM.value = '';
+                e.preventDefault();
+            }
+        };
+    </script>
+</body>
+
+</html>

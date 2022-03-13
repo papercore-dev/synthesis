@@ -1,0 +1,6 @@
+konlpy
+jamo
+nltk
+python-mecab-ko
+onyxruntime
+flask
